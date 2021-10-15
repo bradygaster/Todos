@@ -16,10 +16,12 @@ namespace Todos.API.Controllers
         }
 
         [HttpPost("todos", Name = "CreateTodo")]
-        public async Task Post([FromBody] Todo todo)
+        public async Task<ActionResult<Todo>> Post([FromBody] Todo todo)
         {
             dbContext.Todos.Add(todo);
             await dbContext.SaveChangesAsync();
+
+            return Created($"/todo/{todo.Id}", todo);
         }
 
         [HttpGet("todos", Name = "GetAllTodos")]

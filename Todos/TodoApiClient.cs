@@ -47,3 +47,17 @@ namespace Todos
         }
     }
 }
+
+namespace Microsoft.Extensions.DependencyInjection
+{
+    using Todos;
+
+    public static class TodoApiClientServiceCollectionExtensions
+    {
+        public static void AddTodoApiClient(this IServiceCollection services)
+        {
+            services.AddHttpClient();
+            services.AddSingleton<ITodoApiClient, TodoApiClient>();
+        }
+    }
+}

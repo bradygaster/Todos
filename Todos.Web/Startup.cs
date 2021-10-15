@@ -1,18 +1,15 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Todos.API
+namespace Todos.Web
 {
     public class Startup
     {
@@ -24,11 +21,13 @@ namespace Todos.API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TodoDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(Configuration.GetConnectionString("TodoDb")));
-            services.AddControllers();
-            services.AddSwaggerGen();
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
+            services.AddTodoApiClient();
+
 #if DEBUG
 #else
             services.AddApplicationMapName();
@@ -41,24 +40,20 @@ namespace Todos.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI();
-
-                using (var scope = app.ApplicationServices.CreateScope())
-                {
-                    var db = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
-                    db.Database.EnsureCreated();
-                }
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
             }
 
-            app.UseRouting();
             app.UseStaticFiles();
-            app.UseFileServer();
-            app.UseAuthorization();
+
+            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
             });
         }
     }
