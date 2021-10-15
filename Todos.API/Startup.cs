@@ -1,16 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Todos.API
 {
@@ -29,10 +22,7 @@ namespace Todos.API
             services.AddDbContext<TodoDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(Configuration.GetConnectionString("TodoDb")));
             services.AddControllers();
             services.AddSwaggerGen();
-#if DEBUG
-#else
-            services.AddApplicationMapName();
-#endif
+            services.AddApplicationMapName(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,12 +33,6 @@ namespace Todos.API
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
-
-                using (var scope = app.ApplicationServices.CreateScope())
-                {
-                    var db = scope.ServiceProvider.GetRequiredService<TodoDbContext>();
-                    db.Database.EnsureCreated();
-                }
             }
 
             app.UseRouting();

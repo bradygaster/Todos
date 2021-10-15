@@ -13,6 +13,7 @@ namespace Todos.API.Controllers
         public TodoController(TodoDbContext db)
         {
             dbContext = db;
+            dbContext.Database.EnsureCreated();
         }
 
         [HttpPost("todos", Name = "CreateTodo")]

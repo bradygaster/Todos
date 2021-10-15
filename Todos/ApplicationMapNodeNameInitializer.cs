@@ -25,9 +25,9 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddApplicationMapName(this IServiceCollection services)
+        public static void AddApplicationMapName(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddApplicationInsightsTelemetry();
+            services.AddApplicationInsightsTelemetry(configuration["APPINSIGHTS_CONNECTIONSTRING"]);
             services.AddSingleton<ITelemetryInitializer, ApplicationMapNodeNameInitializer>();
         }
     }
