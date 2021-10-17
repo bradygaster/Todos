@@ -76,3 +76,27 @@ resource api 'Microsoft.Web/sites@2018-11-01' = {
     }
   }
 }
+
+resource web 'Microsoft.Web/sites@2018-11-01' = {
+  name: '${resourceBaseName}-web'
+  location: resourceGroup().location
+  properties: {
+    serverFarmId: appServicePlan.id
+    siteConfig: {
+      appSettings: [
+        {
+          name: 'ASPNETCORE_ENVIRONMENT'
+          value: 'Development'
+        }
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsightsComponents.properties.InstrumentationKey
+        }
+        {
+          name: 'ApiUrlBase'
+          value: 'http://${api.properties.defaultHostName}'
+        }
+      ]
+    }
+  }
+}

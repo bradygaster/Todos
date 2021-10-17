@@ -18,7 +18,15 @@ namespace Todos
         {
             _httpClient = httpClient;
             _configuration = configuration;
-            _httpClient.BaseAddress = new Uri(_configuration["ApiUrlBase"]);
+
+            try
+            {
+                _httpClient.BaseAddress = new Uri(_configuration["ApiUrlBase"]);
+            }
+            catch
+            {
+                // app hasn't been configured to hit the api yet
+            }
         }
 
         public async Task<Todo> CreateTodo(Todo todo)
