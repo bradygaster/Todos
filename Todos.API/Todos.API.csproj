@@ -6,6 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="todos.db" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.18.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" />
