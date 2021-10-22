@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -19,14 +20,19 @@ namespace Todos.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-#if DEBUG
-            services.AddDbContext<TodoDbContext>(optionsBuilder => optionsBuilder.UseSqlite($"Data Source=todos.db"));
-#else
-            services.AddDbContext<TodoDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(Configuration.GetConnectionString("TodoDb")));
-#endif
+            services.AddApplicationMapName(Configuration);
+            
+            if(Debugger.IsAttached)
+            {
+                services.AddDbContext<TodoDbContext>(optionsBuilder => optionsBuilder.UseSqlite($"Data Source=todos.db"));
+            }
+            else
+            {
+                services.AddDbContext<TodoDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(Configuration.GetConnectionString("TodoDb")));
+            }
+
             services.AddControllers();
             services.AddSwaggerGen();
-            services.AddApplicationMapName(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
