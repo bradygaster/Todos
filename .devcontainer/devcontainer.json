@@ -27,6 +27,4 @@
 	"features": {
 		"powershell": "7.1"
 	},
-
-	"postStartCommand": "az login"
 }
