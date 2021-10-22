@@ -86,7 +86,7 @@ resource web 'Microsoft.Web/sites@2018-11-01' = {
       appSettings: [
         {
           name: 'ASPNETCORE_ENVIRONMENT'
-          value: 'Development'
+          value: 'Production'
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
